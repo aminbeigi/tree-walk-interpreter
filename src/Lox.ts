@@ -3,6 +3,8 @@ import { readFileSync } from "fs";
 import promptSync from "prompt-sync";
 
 class Lox {
+  hadError = false;
+
   runFile(path: string): void {
     let data: string;
     try {
@@ -11,6 +13,9 @@ class Lox {
       throw new Error("IOException");
     }
     this.run(data);
+    if (this.hadError) {
+      exit(65);
+    }
   }
 
   runPrompt(): void {
@@ -21,6 +26,7 @@ class Lox {
         exit(0);
       }
       this.run(input);
+      this.hadError = false;
     }
   }
 
@@ -29,6 +35,15 @@ class Lox {
     tokens.forEach((token) => {
       console.log(token);
     });
+  }
+
+  error(line: number, message: string) {
+    this.report(line, "", message);
+  }
+
+  report(line: number, where: string, message: string) {
+    console.error("[line " + line + "] Error" + where + ": " + message);
+    this.hadError = true;
   }
 }
 
