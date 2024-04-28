@@ -1,9 +1,10 @@
 import { exit } from "process";
 import { readFileSync } from "fs";
 import promptSync from "prompt-sync";
+import { Scanner } from "./Scanner";
 
-class Lox {
-  hadError = false;
+export class Lox {
+  static hadError = false;
 
   runFile(path: string): void {
     let data: string;
@@ -13,7 +14,7 @@ class Lox {
       throw new Error("IOException");
     }
     this.run(data);
-    if (this.hadError) {
+    if (Lox.hadError) {
       exit(65);
     }
   }
@@ -26,34 +27,35 @@ class Lox {
         exit(0);
       }
       this.run(input);
-      this.hadError = false;
+      Lox.hadError = false;
     }
   }
 
-  run(s: string) {
-    const tokens = s.trim().split(/\s+/);
+  run(source: string): void {
+    const scanner = new Scanner(source);
+    const tokens = scanner.scanTokens();
     tokens.forEach((token) => {
       console.log(token);
     });
   }
 
-  error(line: number, message: string) {
-    this.report(line, "", message);
+  static error(line: number, message: string): void {
+    Lox.report(line, "", message);
   }
 
-  report(line: number, where: string, message: string) {
+  static report(line: number, where: string, message: string): void {
     console.error("[line " + line + "] Error" + where + ": " + message);
-    this.hadError = true;
+    Lox.hadError = true;
   }
 }
 
 function main(): void {
   const lox = new Lox();
-  if (process.argv.length > 3) {
+  if (process.argv.length > 4) {
     console.log("Usage: jslox [script]");
     exit(64);
-  } else if (process.argv.length == 2) {
-    lox.runFile(process.argv[1]);
+  } else if (process.argv.length == 3) {
+    lox.runFile(process.argv[2]);
   } else {
     lox.runPrompt();
   }
