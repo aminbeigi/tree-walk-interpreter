@@ -71,15 +71,23 @@ export class Parser {
     return this.peek().type === TokenType.EOF;
   }
 
-  private peek(): any {
-    return this.tokens.at(this.current);
+  private peek(): Token {
+    const currentToken = this.tokens.at(this.current);
+    if (!currentToken) {
+      throw new Error("No current token available.");
+    }
+    return currentToken;
   }
 
-  private previous(): any {
-    return this.tokens.at(this.current - 1);
+  private previous(): Token {
+    const previousToken = this.tokens.at(this.current - 1);
+    if (!previousToken) {
+      throw new Error("No previous token available.");
+    }
+    return previousToken;
   }
 
-  private error(token: Token, message: string): any {
+  private error(token: Token, message: string): void {
     Lox.error(token, message);
   }
 

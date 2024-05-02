@@ -40,9 +40,9 @@ export class Grouping implements Expr {
 }
 
 export class Literal implements Expr {
-  value: any;
+  value: string | number | boolean | null;
 
-  constructor(value: any) {
+  constructor(value: string | number | boolean | null) {
     this.value = value;
   }
 

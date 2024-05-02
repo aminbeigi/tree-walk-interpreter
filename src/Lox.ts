@@ -6,9 +6,13 @@ import { Token } from "./Token";
 import { TokenType } from "./TokenType";
 import { Parser } from "./Parser";
 import { AstPrinter } from "./AstPrinter";
+import { RuntimeError } from "./RuntimeError";
+import { Interpreter } from "./Interpreter";
 
 export class Lox {
+  private static interpreter = new Interpreter();
   static hadError = false;
+  static hadRuntimeError = false;
 
   runFile(path: string): void {
     let data: string;
@@ -20,6 +24,9 @@ export class Lox {
     this.run(data);
     if (Lox.hadError) {
       exit(65);
+    }
+    if (Lox.hadRuntimeError) {
+      exit(70);
     }
   }
 
@@ -45,10 +52,14 @@ export class Lox {
       return;
     }
 
-    const astPrinter = new AstPrinter();
     if (expression) {
-      console.log(astPrinter.print(expression));
+      Lox.interpreter.interpret(expression);
     }
+
+    //const astPrinter = new AstPrinter();
+    //if (expression) {
+    //  console.log(astPrinter.print(expression));
+    //}
   }
 
   static error(token: Token, message: string): void {
@@ -57,6 +68,11 @@ export class Lox {
     } else {
       this.report(token.line, " at '" + token.lexeme + "'", message);
     }
+  }
+
+  static runtimeError(error: RuntimeError): void {
+    console.error(error.message + "\n[line " + error.token.line + "]");
+    Lox.hadRuntimeError = true;
   }
 
   static report(line: number, where: string, message: string): void {
@@ -70,7 +86,7 @@ function main(): void {
   if (process.argv.length > 4) {
     console.log("Usage: jslox [script]");
     exit(64);
-  } else if (process.argv.length == 3) {
+  } else if (process.argv.length === 3) {
     lox.runFile(process.argv[2]);
   } else {
     lox.runPrompt();
