@@ -41,7 +41,7 @@ npm run build:start <filename>
 
 ## Lox Example
 
-```js
+```
 > (20 * (5 + 3) - (7 * 2)) / (4 + 2)
 24.333333333333332
 > (5 * 2) < (10 + 3)
