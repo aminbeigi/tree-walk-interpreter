@@ -5,11 +5,11 @@ import { Token } from "./Token";
 import { TokenType } from "./TokenType";
 
 export class Interpreter implements Visitor<unknown> {
-  interpret(expression: Expr): void {
+  interpret(expression: Expr): string {
     try {
       const value = this.evaluate(expression);
       const res = this.stringify(value);
-      console.log(res);
+      return res;
     } catch (error: unknown) {
       if (error instanceof RuntimeError) {
         Lox.runtimeError(error);

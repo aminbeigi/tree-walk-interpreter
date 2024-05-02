@@ -53,7 +53,8 @@ export class Lox {
     }
 
     if (expression) {
-      Lox.interpreter.interpret(expression);
+      const res = Lox.interpreter.interpret(expression);
+      console.log(res);
     }
 
     //const astPrinter = new AstPrinter();
@@ -93,4 +94,6 @@ function main(): void {
   }
 }
 
-main();
+if (require.main === module) {
+  main();
+}

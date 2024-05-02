@@ -46,8 +46,8 @@ npm run build:start <filename>
 24.333333333333332
 > (5 * 2) < (10 + 3)
 true
-> 20 + peanut_butter
-[line 0] Error at 'peanut_butter': Expect expression.
+> 20 + apples
+[line 0] Error at 'apples': Expect expression.
 ```
 
 ## Contributions
