@@ -4,8 +4,7 @@
   "main": "src/index.js",
   "scripts": {
     "build": "npx tsc",
-    "start:prompt": "node dist/Lox.js",
-    "build:start:prompt": "npm run build && npm run start:prompt"
+    "build:start": "npm run build && node dist/Lox.js"
   },
   "author": "Amin Beigi",
   "license": "MIT",
